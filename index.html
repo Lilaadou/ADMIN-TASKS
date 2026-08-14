@@ -148,6 +148,8 @@
   .status-seg .seg.active[data-status="done"]{color:var(--ok);}
   .task-title{font-weight:600;font-size:.95rem;}
   .task-desc{color:var(--muted);font-size:.85rem;margin-top:2px;white-space:pre-wrap;}
+  .task-detail{color:var(--ink);font-size:.85rem;font-weight:600;margin-top:4px;}
+  .detail-input{margin-top:0;}
   .task-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
   .tag{font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:999px;border:1px solid var(--border);color:var(--muted);}
   .tag.due{color:var(--ink);}
@@ -234,7 +236,7 @@
         <form class="add-form" data-owner="abenazer">
           <input type="text" name="title" placeholder="Titre de la tâche" required>
           <textarea name="description" placeholder="Description (optionnel)"></textarea>
-          <select name="category">
+          <select name="category" class="category-select">
             <option value="organisation">🗂️ Organisation</option>
             <option value="mail">📧 Mail</option>
             <option value="appel">📞 Appel téléphonique</option>
@@ -243,6 +245,7 @@
             <option value="facturation">💶 Facturation</option>
             <option value="autre">🔧 Autres</option>
           </select>
+          <input type="text" name="detail" class="detail-input" style="display:none;">
           <div class="row">
             <input type="date" name="dueDate">
             <select name="priority">
@@ -270,7 +273,7 @@
         <form class="add-form" data-owner="virginia">
           <input type="text" name="title" placeholder="Titre de la tâche" required>
           <textarea name="description" placeholder="Description (optionnel)"></textarea>
-          <select name="category">
+          <select name="category" class="category-select">
             <option value="organisation">🗂️ Organisation</option>
             <option value="mail">📧 Mail</option>
             <option value="appel">📞 Appel téléphonique</option>
@@ -279,6 +282,7 @@
             <option value="facturation">💶 Facturation</option>
             <option value="autre">🔧 Autres</option>
           </select>
+          <input type="text" name="detail" class="detail-input" style="display:none;">
           <div class="row">
             <input type="date" name="dueDate">
             <select name="priority">
@@ -359,6 +363,7 @@
             </div>
             <div class="task-title">${escapeHtml(t.title)}</div>
             ${t.description ? `<div class="task-desc">${escapeHtml(t.description)}</div>` : ""}
+            ${t.detail ? `<div class="task-detail">${labelDetail(t.category, t.detail)}</div>` : ""}
             <div class="task-meta">
               ${t.category ? `<span class="tag cat">${labelCategory(t.category)}</span>` : ""}
               <span class="tag p-${t.priority}">${labelPriority(t.priority)}</span>
@@ -433,6 +438,13 @@
   function labelCategory(c){
     return CATEGORIES[c] || c;
   }
+  function labelDetail(category, detail){
+    const d = escapeHtml(detail);
+    if(category==="mail") return `📧 ${d}`;
+    if(category==="appel") return `📞 ${d}`;
+    if(category==="b2b") return `🤝 Client : ${d}`;
+    return d;
+  }
   function labelPriority(p){
     return {urgent:"Urgent", normal:"Normal", faible:"Peut attendre"}[p] || p;
   }
@@ -494,6 +506,7 @@
       title: formData.title.trim(),
       description: formData.description.trim(),
       category: formData.category || "autre",
+      detail: (formData.detail || "").trim(),
       dueDate: formData.dueDate || "",
       priority: formData.priority || "normal",
       status: "todo",
@@ -554,10 +567,31 @@
       form.classList.toggle("open");
     });
   });
+  const DETAIL_CONFIG = {
+    mail: { placeholder: "Adresse mail concernée", type: "email" },
+    appel: { placeholder: "Numéro de téléphone concerné", type: "tel" },
+    b2b: { placeholder: "Nom du client B2B", type: "text" }
+  };
+  function updateDetailField(form){
+    const cat = form.querySelector(".category-select").value;
+    const input = form.querySelector(".detail-input");
+    const cfg = DETAIL_CONFIG[cat];
+    if(cfg){
+      input.style.display = "";
+      input.type = cfg.type;
+      input.placeholder = cfg.placeholder;
+    }else{
+      input.style.display = "none";
+      input.value = "";
+    }
+  }
   document.querySelectorAll(".add-form").forEach(form=>{
+    updateDetailField(form);
+    form.querySelector(".category-select").addEventListener("change", ()=> updateDetailField(form));
     form.querySelector(".cancel").addEventListener("click", ()=>{
       form.classList.remove("open");
       form.reset();
+      updateDetailField(form);
     });
     form.addEventListener("submit", (e)=>{
       e.preventDefault();
@@ -566,6 +600,7 @@
       if(!data.title || !data.title.trim()) return;
       addTask(owner, data);
       form.reset();
+      updateDetailField(form);
       form.classList.remove("open");
     });
   });
