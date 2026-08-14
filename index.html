@@ -10,6 +10,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Tâches Admin">
 <meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <!-- ============================================================
      CONFIGURATION — à remplir une fois le Google Sheet + Apps
@@ -28,7 +31,10 @@
     --card:#ffffff;
     --ink:#1f2430;
     --muted:#6b7280;
-    --border:#e5e7eb;
+    --border:#e9e9ec;
+    --brand:#c8321e;
+    --brand-dark:#a32716;
+    --brand-light:#fdeeec;
     --aben:#2f6fed;
     --aben-bg:#eaf1ff;
     --virg:#c1272d;
@@ -36,42 +42,46 @@
     --ok:#1a9e6b;
     --warn:#d97706;
     --danger:#dc2626;
-    --radius:14px;
-    --shadow:0 1px 2px rgba(20,20,40,.04), 0 6px 20px rgba(20,20,40,.06);
+    --radius:16px;
+    --shadow:0 1px 2px rgba(20,20,40,.04), 0 10px 24px rgba(20,20,40,.07);
+    --shadow-hover:0 4px 10px rgba(20,20,40,.06), 0 16px 32px rgba(20,20,40,.1);
   }
   *{box-sizing:border-box;}
+  html{-webkit-font-smoothing:antialiased;}
   body{
     margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     background:var(--bg);
     color:var(--ink);
+    letter-spacing:-0.01em;
   }
   .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px;}
 
   header.top{
     display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;
-    margin-bottom:20px;
+    margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);
   }
-  header.top h1{font-size:1.5rem;margin:0;}
+  header.top h1{font-size:1.4rem;margin:0;font-weight:800;letter-spacing:-0.02em;}
   header.top p{margin:2px 0 0;color:var(--muted);font-size:.92rem;}
   .brand{display:flex;align-items:center;gap:14px;}
-  .brand .logo{height:44px;width:auto;display:block;}
+  .brand .logo{height:42px;width:auto;display:block;}
   .top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
 
   button{
-    font:inherit;cursor:pointer;border:none;border-radius:10px;padding:9px 14px;
+    font:inherit;font-weight:600;cursor:pointer;border:none;border-radius:10px;padding:9px 15px;
     background:var(--card);border:1px solid var(--border);color:var(--ink);
-    transition:.15s;
+    transition:.15s ease;
   }
-  button:hover{background:#f1f2f5;}
-  button.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
-  button.primary:hover{opacity:.9;background:var(--ink);}
-  button.small{padding:5px 9px;font-size:.8rem;border-radius:8px;}
+  button:hover{background:#f6f6f8;border-color:#dcdce1;}
+  button:active{transform:scale(.97);}
+  button.primary{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 2px 8px rgba(200,50,30,.25);}
+  button.primary:hover{background:var(--brand-dark);border-color:var(--brand-dark);box-shadow:0 4px 12px rgba(200,50,30,.32);}
+  button.small{padding:6px 11px;font-size:.8rem;border-radius:8px;}
   button.ghost{background:transparent;border-color:transparent;color:var(--muted);}
-  button.ghost:hover{background:#eee;}
+  button.ghost:hover{background:#f1f1f4;border-color:transparent;}
 
   .badge{
-    font-size:.78rem;padding:4px 10px;border-radius:999px;border:1px solid var(--border);
+    font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:999px;border:1px solid var(--border);
     color:var(--muted);background:#fff;
   }
   .badge.demo{color:var(--warn);border-color:#f3d9ae;background:#fff8ec;}
@@ -89,28 +99,34 @@
   .board{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
   @media (max-width: 820px){.board{grid-template-columns:1fr;}}
 
-  .col{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .col{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s ease;}
+  .col:hover{box-shadow:var(--shadow-hover);}
   .col-head{
-    padding:16px 18px;display:flex;justify-content:space-between;align-items:center;
+    padding:18px 20px;display:flex;justify-content:space-between;align-items:center;
     border-bottom:1px solid var(--border);
   }
-  .col.aben .col-head{background:var(--aben-bg);}
-  .col.virg .col-head{background:var(--virg-bg);}
-  .col-head h2{margin:0;font-size:1.05rem;display:flex;align-items:center;gap:8px;}
-  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .col.aben .col-head{background:linear-gradient(135deg,var(--aben-bg),#fff);}
+  .col.virg .col-head{background:linear-gradient(135deg,var(--virg-bg),#fff);}
+  .col-head h2{margin:0;font-size:1.05rem;font-weight:700;display:flex;align-items:center;gap:9px;}
+  .dot{width:11px;height:11px;border-radius:50%;display:inline-block;box-shadow:0 0 0 3px rgba(0,0,0,.04);}
   .col.aben .dot{background:var(--aben);}
   .col.virg .dot{background:var(--virg);}
-  .count{font-size:.8rem;color:var(--muted);font-weight:500;}
+  .count{font-size:.78rem;color:var(--muted);font-weight:600;background:#fff;padding:3px 10px;border-radius:999px;border:1px solid var(--border);}
 
-  .col-body{padding:14px;display:flex;flex-direction:column;gap:10px;min-height:80px;}
+  .col-body{padding:16px;display:flex;flex-direction:column;gap:10px;min-height:80px;}
 
   .add-form{
-    display:none;flex-direction:column;gap:8px;background:#fafafa;border:1px dashed var(--border);
-    border-radius:10px;padding:12px;
+    display:none;flex-direction:column;gap:9px;background:#fafafa;border:1px dashed #d8d8de;
+    border-radius:12px;padding:14px;
   }
-  .add-form.open{display:flex;}
+  .add-form.open{display:flex;animation:fadeIn .18s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
   .add-form input[type=text], .add-form textarea, .add-form input[type=date], .add-form select{
-    width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font:inherit;background:#fff;
+    width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:9px;font:inherit;background:#fff;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .add-form input:focus, .add-form textarea:focus, .add-form select:focus{
+    outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-light);
   }
   .add-form textarea{resize:vertical;min-height:48px;}
   .add-form .row{display:flex;gap:8px;}
@@ -118,30 +134,59 @@
   .add-form .actions{display:flex;justify-content:flex-end;gap:8px;}
 
   .task{
-    border:1px solid var(--border);border-radius:12px;padding:12px 12px 10px;background:#fff;
-    display:flex;gap:10px;align-items:flex-start;
+    border:1px solid var(--border);border-radius:13px;padding:13px 13px 11px;background:#fff;
+    display:flex;gap:10px;align-items:flex-start;transition:box-shadow .15s ease, transform .15s ease, border-color .15s ease;
   }
+  .task:hover{box-shadow:0 4px 14px rgba(20,20,40,.08);transform:translateY(-1px);border-color:#dcdce2;}
   .task.done{opacity:.55;}
-  .task input[type=checkbox]{margin-top:3px;width:17px;height:17px;flex:0 0 auto;cursor:pointer;}
+  .task input[type=checkbox]{
+    margin-top:3px;width:19px;height:19px;flex:0 0 auto;cursor:pointer;accent-color:var(--brand);
+  }
   .task-body{flex:1;min-width:0;}
   .task-title{font-weight:600;font-size:.95rem;}
   .task.done .task-title{text-decoration:line-through;}
   .task-desc{color:var(--muted);font-size:.85rem;margin-top:2px;white-space:pre-wrap;}
-  .task-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
-  .tag{font-size:.72rem;padding:2px 8px;border-radius:999px;border:1px solid var(--border);color:var(--muted);}
+  .task-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
+  .tag{font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:999px;border:1px solid var(--border);color:var(--muted);}
   .tag.due{color:var(--ink);}
   .tag.overdue{color:var(--danger);border-color:#f3c6c6;background:#fdeded;}
   .tag.p-urgent{color:#fff;background:var(--danger);border-color:var(--danger);}
   .tag.p-normal{color:#3b5bdb;background:#eef1ff;border-color:#dbe3ff;}
   .tag.p-faible{color:#4b5563;background:#f3f4f6;}
+  .tag.cat{color:var(--brand-dark);background:var(--brand-light);border-color:#f6d9d4;}
   .task-actions{display:flex;gap:4px;}
+  .task .del{opacity:0;transition:opacity .15s ease;}
+  .task:hover .del{opacity:1;}
 
-  .empty{color:var(--muted);font-size:.88rem;text-align:center;padding:18px 8px;}
+  .empty{color:var(--muted);font-size:.88rem;text-align:center;padding:22px 8px;}
 
-  .add-trigger{width:100%;border-style:dashed;color:var(--muted);}
+  .add-trigger{width:100%;border-style:dashed;border-color:#d8d8de;color:var(--muted);font-weight:600;}
+  .add-trigger:hover{color:var(--brand);border-color:var(--brand);background:var(--brand-light);}
 
-  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:.8rem;}
-  footer a{color:var(--muted);}
+  footer{margin-top:32px;text-align:center;color:var(--muted);font-size:.8rem;}
+  footer a{color:var(--brand);text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+
+  .history{margin-top:36px;background:#fafafa;border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;}
+  .history h2{font-size:1.05rem;margin:0;font-weight:700;}
+  .history-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+  .month-nav{display:flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:4px;}
+  .month-nav button{padding:5px 10px;font-size:1.05rem;line-height:1;border-radius:999px;border-color:transparent;background:transparent;}
+  .month-nav button:hover{background:var(--brand-light);color:var(--brand-dark);}
+  .month-nav button:disabled{opacity:.3;cursor:default;}
+  .month-nav button:disabled:hover{background:transparent;color:inherit;}
+  .month-label{font-weight:700;font-size:.88rem;min-width:120px;text-align:center;}
+  .hist-task{
+    display:flex;align-items:center;gap:10px;padding:9px 12px;
+    border:1px solid var(--border);border-radius:10px;background:#fff;font-size:.88rem;
+    transition:box-shadow .15s ease;
+  }
+  .hist-task:hover{box-shadow:0 2px 8px rgba(20,20,40,.06);}
+  .hist-task .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;}
+  .hist-task .dot.dot-abenazer{background:var(--aben);}
+  .hist-task .dot.dot-virginia{background:var(--virg);}
+  .hist-task .title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .hist-task .date{color:var(--muted);font-size:.78rem;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -179,6 +224,15 @@
         <form class="add-form" data-owner="abenazer">
           <input type="text" name="title" placeholder="Titre de la tâche" required>
           <textarea name="description" placeholder="Description (optionnel)"></textarea>
+          <select name="category">
+            <option value="organisation">🗂️ Organisation</option>
+            <option value="mail">📧 Mail</option>
+            <option value="appel">📞 Appel téléphonique</option>
+            <option value="b2b">🤝 B2B</option>
+            <option value="commande">📦 Commande</option>
+            <option value="facturation">💶 Facturation</option>
+            <option value="autre">🔧 Autres</option>
+          </select>
           <div class="row">
             <input type="date" name="dueDate">
             <select name="priority">
@@ -206,6 +260,15 @@
         <form class="add-form" data-owner="virginia">
           <input type="text" name="title" placeholder="Titre de la tâche" required>
           <textarea name="description" placeholder="Description (optionnel)"></textarea>
+          <select name="category">
+            <option value="organisation">🗂️ Organisation</option>
+            <option value="mail">📧 Mail</option>
+            <option value="appel">📞 Appel téléphonique</option>
+            <option value="b2b">🤝 B2B</option>
+            <option value="commande">📦 Commande</option>
+            <option value="facturation">💶 Facturation</option>
+            <option value="autre">🔧 Autres</option>
+          </select>
           <div class="row">
             <input type="date" name="dueDate">
             <select name="priority">
@@ -224,6 +287,18 @@
     </section>
   </div>
 
+  <section class="history">
+    <div class="history-head">
+      <h2>📅 Tâches effectuées</h2>
+      <div class="month-nav">
+        <button id="histPrev" class="small ghost" title="Mois précédent">‹</button>
+        <span id="histMonthLabel" class="month-label"></span>
+        <button id="histNext" class="small ghost" title="Mois suivant">›</button>
+      </div>
+    </div>
+    <div id="historyList"></div>
+  </section>
+
   <footer>
     Dernière synchro : <span id="lastSync">jamais</span> · <a href="GUIDE_CONFIGURATION.md" target="_blank">Guide de configuration</a>
   </footer>
@@ -236,6 +311,7 @@
 
   let tasks = [];
   let pollTimer = null;
+  let historyMonth = new Date().toISOString().slice(0,7);
 
   const el = (id) => document.getElementById(id);
   const modeBadge = el("modeBadge");
@@ -250,9 +326,8 @@
   function render(){
     ["abenazer","virginia"].forEach(owner=>{
       const list = el("list-"+owner);
-      const items = tasks.filter(t=>t.owner===owner)
+      const items = tasks.filter(t=>t.owner===owner && t.status!=="done")
         .sort((a,b)=>{
-          if(a.status!==b.status) return a.status==="done"?1:-1;
           const pr = {urgent:0, normal:1, faible:2};
           if(pr[a.priority]!==pr[b.priority]) return pr[a.priority]-pr[b.priority];
           return (a.dueDate||"9999").localeCompare(b.dueDate||"9999");
@@ -263,14 +338,15 @@
       }
       items.forEach(t=>{
         const div = document.createElement("div");
-        div.className = "task" + (t.status==="done" ? " done" : "");
-        const overdue = t.dueDate && t.status!=="done" && t.dueDate < todayISO();
+        div.className = "task";
+        const overdue = t.dueDate && t.dueDate < todayISO();
         div.innerHTML = `
-          <input type="checkbox" ${t.status==="done"?"checked":""} data-id="${t.id}" class="chk">
+          <input type="checkbox" data-id="${t.id}" class="chk">
           <div class="task-body">
             <div class="task-title">${escapeHtml(t.title)}</div>
             ${t.description ? `<div class="task-desc">${escapeHtml(t.description)}</div>` : ""}
             <div class="task-meta">
+              ${t.category ? `<span class="tag cat">${labelCategory(t.category)}</span>` : ""}
               <span class="tag p-${t.priority}">${labelPriority(t.priority)}</span>
               ${t.dueDate ? `<span class="tag due ${overdue?"overdue":""}">${overdue?"⚠️ ":"📅 "}${formatDate(t.dueDate)}</span>` : ""}
             </div>
@@ -281,11 +357,63 @@
         `;
         list.appendChild(div);
       });
-      const open = tasks.filter(t=>t.owner===owner && t.status!=="done").length;
+      const open = items.length;
       el("count-"+owner).textContent = open + " à faire";
     });
+    renderHistory();
   }
 
+  function renderHistory(){
+    el("histMonthLabel").textContent = formatMonthLabel(historyMonth);
+    const container = el("historyList");
+    const items = tasks.filter(t=>t.status==="done" && (t.completedAt||t.createdAt||"").slice(0,7)===historyMonth)
+      .sort((a,b)=> (b.completedAt||b.createdAt||"").localeCompare(a.completedAt||a.createdAt||""));
+    container.innerHTML = "";
+    if(items.length===0){
+      container.innerHTML = '<div class="empty">Aucune tâche effectuée ce mois-ci.</div>';
+    }
+    items.forEach(t=>{
+      const dateStr = t.completedAt || t.createdAt || "";
+      const row = document.createElement("div");
+      row.className = "hist-task";
+      row.innerHTML = `
+        <span class="dot dot-${t.owner}"></span>
+        <span class="title">${escapeHtml(t.title)}</span>
+        <span class="date">${dateStr ? formatDate(dateStr.slice(0,10)) : ""}</span>
+        <button class="ghost small restore" data-id="${t.id}" title="Remettre à faire">↩</button>
+      `;
+      container.appendChild(row);
+    });
+    el("histNext").disabled = historyMonth >= todayISO().slice(0,7);
+  }
+
+  function shiftMonth(delta){
+    const [y, m] = historyMonth.split("-").map(Number);
+    const d = new Date(y, (m - 1) + delta, 1);
+    const next = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
+    if(next > todayISO().slice(0,7)) return; // pas de mois futur
+    historyMonth = next;
+    renderHistory();
+  }
+
+  function formatMonthLabel(m){
+    const [y, mo] = m.split("-");
+    const noms = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+    return `${noms[parseInt(mo,10)-1]} ${y}`;
+  }
+
+  const CATEGORIES = {
+    organisation: "🗂️ Organisation",
+    mail: "📧 Mail",
+    appel: "📞 Appel téléphonique",
+    b2b: "🤝 B2B",
+    commande: "📦 Commande",
+    facturation: "💶 Facturation",
+    autre: "🔧 Autres"
+  };
+  function labelCategory(c){
+    return CATEGORIES[c] || c;
+  }
   function labelPriority(p){
     return {urgent:"Urgent", normal:"Normal", faible:"Peut attendre"}[p] || p;
   }
@@ -345,10 +473,12 @@
       owner,
       title: formData.title.trim(),
       description: formData.description.trim(),
+      category: formData.category || "autre",
       dueDate: formData.dueDate || "",
       priority: formData.priority || "normal",
       status: "todo",
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      completedAt: ""
     };
     tasks.push(t);
     render();
@@ -358,7 +488,22 @@
   function toggleTask(id){
     const t = tasks.find(t=>t.id===id);
     if(!t) return;
-    t.status = t.status==="done" ? "todo" : "done";
+    if(t.status==="done"){
+      t.status = "todo";
+      t.completedAt = "";
+    }else{
+      t.status = "done";
+      t.completedAt = new Date().toISOString();
+    }
+    render();
+    if(DEMO_MODE){ saveLocal(); }
+    else{ callSheet("update", { task: t }); }
+  }
+  function restoreTask(id){
+    const t = tasks.find(t=>t.id===id);
+    if(!t) return;
+    t.status = "todo";
+    t.completedAt = "";
     render();
     if(DEMO_MODE){ saveLocal(); }
     else{ callSheet("update", { task: t }); }
@@ -397,8 +542,11 @@
   document.body.addEventListener("click", (e)=>{
     if(e.target.classList.contains("chk")) toggleTask(e.target.dataset.id);
     if(e.target.classList.contains("del")) deleteTask(e.target.dataset.id);
+    if(e.target.classList.contains("restore")) restoreTask(e.target.dataset.id);
   });
   el("noticeClose").addEventListener("click", ()=> notice.style.display="none");
+  el("histPrev").addEventListener("click", ()=> shiftMonth(-1));
+  el("histNext").addEventListener("click", ()=> shiftMonth(1));
   btnRefresh.addEventListener("click", ()=>{
     if(DEMO_MODE) loadLocal(); else loadFromSheet();
   });
